@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>欢迎</title>
+</head>
+<body>
+    <h1>欢迎, <span id="username"></span>!</h1>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById('username').textContent = urlParams.get('username');
+    </script>
+</body>
+</html>

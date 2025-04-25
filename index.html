@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>极简登录</title>
+    <style>
+        .container { max-width: 300px; margin: 100px auto; text-align: center; }
+        input { padding: 10px; margin: 10px; width: 80%; }
+        button { padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>输入用户名即可登录</h2>
+        <input type="text" id="username" placeholder="用户名">
+        <button onclick="login()">进入</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // 替换为你的 Vercel 域名
+        const API_URL = 'https://my-website-psi-tan-33.vercel.app/api/login';
+
+        async function login() {
+            const username = document.getElementById('username').value;
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            });
+
+            if (response.ok) {
+                window.location.href = `welcome.html?username=${username}`; // 跳转到欢迎页
+            } else {
+                document.getElementById('message').textContent = '登录失败';
+            }
+        }
+    </script>
+</body>
+</html>
