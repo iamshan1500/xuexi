@@ -1,54 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>极简登录系统</title>
+    <title>登录</title>
     <style>
-        .container { max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; }
-        input, button { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
-        #error { color: red; display: none; }
+        body { font-family: Arial; margin: 50px; }
+        .login-box { width: 300px; margin: 100px auto; padding: 20px; border: 1px solid #ccc; }
+        input { margin: 10px 0; padding: 8px; width: 92%; }
+        button { padding: 10px; background: #0070f3; color: white; border: none; width: 100%; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>用户名登录</h2>
-        <input type="text" id="username" placeholder="输入用户名">
-        <button onclick="handleLogin()">登录/注册</button>
-        <div id="error"></div>
+    <div class="login-box">
+        <h2>用户登录</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="用户名" required>
+            <input type="password" id="password" placeholder="密码" required>
+            <button type="submit">登录</button>
+        </form>
     </div>
 
     <script>
-        const API_URL = 'https://xuexi-one.vercel.app/api/login' // 替换为你的真实域名
-
-        async function handleLogin() {
-            const username = document.getElementById('username').value.trim()
-            const errorDiv = document.getElementById('error')
-
-            if (!username) {
-                errorDiv.textContent = '请输入用户名'
-                errorDiv.style.display = 'block'
-                return
-            }
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username })
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
                 })
+            });
 
-                if (!response.ok) {
-                    const errorData = await response.json()
-                    throw new Error(errorData.error || '请求失败')
-                }
-
-                // 登录成功后跳转
-                window.location.href = `/welcome.html?username=${encodeURIComponent(username)}`
-            } catch (error) {
-                errorDiv.textContent = error.message
-                errorDiv.style.display = 'block'
-                console.error('登录失败:', error)
+            const result = await response.json();
+            
+            if (result.success) {
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = '/welcome.html';
+            } else {
+                alert('登录失败！');
             }
-        }
+        });
     </script>
 </body>
 </html>
