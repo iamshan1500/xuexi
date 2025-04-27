@@ -2,12 +2,16 @@
 <html>
 <head>
     <title>欢迎</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin: 100px; }
+    </style>
 </head>
 <body>
-    <h1>欢迎, <span id="username"></span>!</h1>
+    <h1>🎉 欢迎访问！</h1>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        document.getElementById('username').textContent = urlParams.get('username');
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = '/';
+        }
     </script>
 </body>
 </html>
